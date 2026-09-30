@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grupos — GestionTec</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="contenido">
+      <h1>Grupos</h1>
+
+      <div class="tarjeta">
+        <div class="barra-acciones">
+          <span id="contador-grupos"></span>
+          <button id="btn-nuevo" class="boton boton--primario">+ Nuevo grupo</button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Disciplina / Curso</th>
+              <th>Nivel</th>
+              <th>Profesor</th>
+              <th>Período</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-grupos"></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <div id="modal-fondo" class="modal-fondo oculto">
+    <div class="modal-caja">
+      <h2 id="modal-titulo">Nuevo grupo</h2>
+      <form id="form-grupo">
+        <input type="hidden" id="grupo-id" />
+        <div class="campo">
+          <label for="grupo-nombre">Nombre</label>
+          <input type="text" id="grupo-nombre" required placeholder="Piano Inicial - Grupo A" />
+        </div>
+        <div class="form-grid">
+          <div class="campo">
+            <label for="grupo-disciplina">Disciplina</label>
+            <select id="grupo-disciplina" required></select>
+          </div>
+          <div class="campo">
+            <label for="grupo-curso">Curso</label>
+            <select id="grupo-curso" required></select>
+          </div>
+          <div class="campo">
+            <label for="grupo-nivel">Nivel (opcional)</label>
+            <select id="grupo-nivel">
+              <option value="">Sin especificar</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label for="grupo-profesor">Profesor (opcional)</label>
+            <select id="grupo-profesor">
+              <option value="">Sin asignar</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label for="grupo-periodo">Período académico</label>
+            <select id="grupo-periodo" required></select>
+          </div>
+          <div class="campo">
+            <label for="grupo-capacidad">Capacidad (opcional)</label>
+            <input type="number" id="grupo-capacidad" min="1" />
+          </div>
+        </div>
+        <div class="modal-acciones">
+          <button type="button" id="btn-cancelar" class="boton boton--secundario">Cancelar</button>
+          <button type="submit" class="boton boton--primario">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/notificaciones.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="grupos.js"></script>
+</body>
+</html>
