@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Períodos académicos — GestionTec</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="contenido">
+      <h1>Períodos académicos</h1>
+
+      <div class="tarjeta">
+        <div class="barra-acciones">
+          <span id="contador-periodos"></span>
+          <button id="btn-nuevo" class="boton boton--primario">+ Nuevo período</button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Inicio</th>
+              <th>Fin</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-periodos"></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <div id="modal-fondo" class="modal-fondo oculto">
+    <div class="modal-caja">
+      <h2 id="modal-titulo">Nuevo período académico</h2>
+      <form id="form-periodo">
+        <input type="hidden" id="periodo-id" />
+        <div class="campo">
+          <label for="periodo-nombre">Nombre</label>
+          <input type="text" id="periodo-nombre" required placeholder="2026, Primer Cuatrimestre 2026..." />
+        </div>
+        <div class="form-grid">
+          <div class="campo">
+            <label for="periodo-fecha-inicio">Fecha de inicio</label>
+            <input type="date" id="periodo-fecha-inicio" required />
+          </div>
+          <div class="campo">
+            <label for="periodo-fecha-fin">Fecha de fin</label>
+            <input type="date" id="periodo-fecha-fin" required />
+          </div>
+        </div>
+        <div class="modal-acciones">
+          <button type="button" id="btn-cancelar" class="boton boton--secundario">Cancelar</button>
+          <button type="submit" class="boton boton--primario">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/notificaciones.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="periodos.js"></script>
+</body>
+</html>
