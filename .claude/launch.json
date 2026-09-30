@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "backend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "backend", "run", "dev"],
+      "port": 3000
+    },
+    {
+      "name": "frontend-admin",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["http-server", "frontend/admin", "-p", "5500", "-c-1"],
+      "port": 5500
+    }
+  ]
+}

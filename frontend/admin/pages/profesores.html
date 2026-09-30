@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profesores / Instructores — GestionTec</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="contenido">
+      <h1>Profesores / Instructores</h1>
+
+      <div class="tarjeta">
+        <div class="barra-acciones">
+          <span id="contador-profesores"></span>
+          <button id="btn-nuevo" class="boton boton--primario">+ Nuevo profesor</button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Documento</th>
+              <th>Email</th>
+              <th>Especialidad</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-profesores"></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <div id="modal-fondo" class="modal-fondo oculto">
+    <div class="modal-caja">
+      <h2 id="modal-titulo">Nuevo profesor</h2>
+      <form id="form-profesor">
+        <input type="hidden" id="profesor-id" />
+        <div class="form-grid">
+          <div class="campo">
+            <label for="profesor-nombre">Nombre</label>
+            <input type="text" id="profesor-nombre" required />
+          </div>
+          <div class="campo">
+            <label for="profesor-apellido">Apellido</label>
+            <input type="text" id="profesor-apellido" required />
+          </div>
+          <div class="campo">
+            <label for="profesor-documento">Documento</label>
+            <input type="text" id="profesor-documento" />
+          </div>
+          <div class="campo">
+            <label for="profesor-telefono">Teléfono</label>
+            <input type="text" id="profesor-telefono" />
+          </div>
+          <div class="campo">
+            <label for="profesor-email">Email</label>
+            <input type="email" id="profesor-email" />
+          </div>
+          <div class="campo">
+            <label for="profesor-especialidad">Especialidad</label>
+            <input type="text" id="profesor-especialidad" placeholder="Piano, Ballet, Inglés..." />
+          </div>
+        </div>
+        <div class="campo">
+          <label for="profesor-observaciones">Observaciones</label>
+          <textarea id="profesor-observaciones" rows="2"></textarea>
+        </div>
+        <div class="modal-acciones">
+          <button type="button" id="btn-cancelar" class="boton boton--secundario">Cancelar</button>
+          <button type="submit" class="boton boton--primario">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/notificaciones.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="profesores.js"></script>
+</body>
+</html>

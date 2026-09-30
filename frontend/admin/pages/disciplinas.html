@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Disciplinas — GestionTec</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="contenido">
+      <h1>Disciplinas</h1>
+
+      <div class="tarjeta">
+        <div class="barra-acciones">
+          <span id="contador-disciplinas"></span>
+          <button id="btn-nueva" class="boton boton--primario">+ Nueva disciplina</button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-disciplinas"></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <div id="modal-fondo" class="modal-fondo oculto">
+    <div class="modal-caja">
+      <h2 id="modal-titulo">Nueva disciplina</h2>
+      <form id="form-disciplina">
+        <input type="hidden" id="disciplina-id" />
+        <div class="campo">
+          <label for="disciplina-nombre">Nombre</label>
+          <input type="text" id="disciplina-nombre" required />
+        </div>
+        <div class="campo">
+          <label for="disciplina-descripcion">Descripción</label>
+          <textarea id="disciplina-descripcion" rows="3"></textarea>
+        </div>
+        <div class="modal-acciones">
+          <button type="button" id="btn-cancelar" class="boton boton--secundario">Cancelar</button>
+          <button type="submit" class="boton boton--primario">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/notificaciones.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="disciplinas.js"></script>
+</body>
+</html>

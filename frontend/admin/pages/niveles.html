@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Niveles — GestionTec</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="contenido">
+      <h1>Niveles</h1>
+
+      <div class="tarjeta">
+        <div class="barra-acciones">
+          <span id="contador-niveles"></span>
+          <button id="btn-nuevo" class="boton boton--primario">+ Nuevo nivel</button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Orden</th>
+              <th>Nombre</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-niveles"></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <div id="modal-fondo" class="modal-fondo oculto">
+    <div class="modal-caja">
+      <h2 id="modal-titulo">Nuevo nivel</h2>
+      <form id="form-nivel">
+        <input type="hidden" id="nivel-id" />
+        <div class="campo">
+          <label for="nivel-nombre">Nombre</label>
+          <input type="text" id="nivel-nombre" required placeholder="Inicial, Nivel 1, Principiante..." />
+        </div>
+        <div class="campo">
+          <label for="nivel-orden">Orden</label>
+          <input type="number" id="nivel-orden" value="0" required />
+        </div>
+        <div class="modal-acciones">
+          <button type="button" id="btn-cancelar" class="boton boton--secundario">Cancelar</button>
+          <button type="submit" class="boton boton--primario">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/notificaciones.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="niveles.js"></script>
+</body>
+</html>
