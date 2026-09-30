@@ -3,11 +3,16 @@ const { AppError } = require('../../utils/errors');
 
 const COOKIE_MAX_AGE_MS = 12 * 60 * 60 * 1000; // debe reflejar JWT_EXPIRES_IN
 
+const ES_PRODUCCION = process.env.NODE_ENV === 'production';
+
 function setTokenCookie(res, token) {
   res.cookie('token', token, {
     httpOnly: true,
-    sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
+    // En local, front y back comparten "site" (localhost) y 'lax' alcanza.
+    // En Railway, front y back viven en subdominios distintos: sin 'none'
+    // (que exige 'secure') el navegador descarta la cookie en cada fetch.
+    sameSite: ES_PRODUCCION ? 'none' : 'lax',
+    secure: ES_PRODUCCION,
     maxAge: COOKIE_MAX_AGE_MS,
   });
 }
@@ -51,7 +56,11 @@ async function login(req, res, next) {
 }
 
 function logout(req, res) {
-  res.clearCookie('token');
+  res.clearCookie('token', {
+    httpOnly: true,
+    sameSite: ES_PRODUCCION ? 'none' : 'lax',
+    secure: ES_PRODUCCION,
+  });
   res.json({ ok: true });
 }
 

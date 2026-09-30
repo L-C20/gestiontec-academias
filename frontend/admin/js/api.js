@@ -1,4 +1,10 @@
-const API_BASE_URL = 'http://localhost:3000';
+// Sin build tooling no hay variables de entorno en el frontend: se detecta
+// el entorno por el hostname. Actualizar la URL de producción si cambia el
+// dominio del backend en Railway.
+const API_BASE_URL =
+  window.location.hostname === 'localhost'
+    ? 'http://localhost:3000'
+    : 'https://backend-production-4284.up.railway.app';
 
 // Todas las llamadas al backend pasan por acá. `credentials: 'include'` es
 // lo que hace que el navegador mande la cookie httpOnly del JWT en cada request.
