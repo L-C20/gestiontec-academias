@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ficha de alumno — GestionTec</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <style>
+    .tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; border-bottom: 2px solid var(--gris-medio); }
+    .tab-boton { background: none; border: none; padding: 0.7rem 1.2rem; font-weight: 600; color: var(--gris-oscuro); border-bottom: 3px solid transparent; border-radius: 0; }
+    .tab-boton.activa { color: var(--bordo); border-bottom-color: var(--bordo); }
+    .tab-panel.oculto { display: none; }
+    .ficha-datos { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; }
+    .ficha-datos div span { display: block; font-size: 0.78rem; color: var(--gris-oscuro); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="app-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="contenido">
+      <p><a href="alumnos.html" class="boton boton--texto">&larr; Volver a alumnos</a></p>
+      <h1 id="alumno-titulo">Ficha del alumno</h1>
+
+      <div class="tarjeta">
+        <div class="ficha-datos" id="ficha-datos"></div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-boton activa" data-tab="matriculas">Matrículas</button>
+        <button class="tab-boton" data-tab="inscripciones">Inscripciones</button>
+        <button class="tab-boton" data-tab="asistencias">Asistencias</button>
+      </div>
+
+      <!-- Matrículas -->
+      <div id="panel-matriculas" class="tab-panel">
+        <div class="tarjeta">
+          <div class="barra-acciones">
+            <span id="contador-matriculas"></span>
+            <button id="btn-nueva-matricula" class="boton boton--primario">+ Nueva matrícula</button>
+          </div>
+          <table>
+            <thead>
+              <tr><th>Número</th><th>Período</th><th>Fecha alta</th><th>Estado</th><th>Acciones</th></tr>
+            </thead>
+            <tbody id="tabla-matriculas"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Inscripciones -->
+      <div id="panel-inscripciones" class="tab-panel oculto">
+        <div class="tarjeta">
+          <div class="barra-acciones">
+            <span id="contador-inscripciones"></span>
+            <button id="btn-nueva-inscripcion" class="boton boton--primario">+ Nueva inscripción</button>
+          </div>
+          <table>
+            <thead>
+              <tr><th>Grupo</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr>
+            </thead>
+            <tbody id="tabla-inscripciones"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Asistencias -->
+      <div id="panel-asistencias" class="tab-panel oculto">
+        <div class="tarjeta">
+          <div class="campo" style="max-width: 420px">
+            <label for="asistencias-inscripcion">Inscripción</label>
+            <select id="asistencias-inscripcion"></select>
+          </div>
+          <p id="asistencias-resumen"></p>
+
+          <form id="form-asistencia" class="form-grid" style="align-items: end; margin-bottom: 1rem">
+            <div class="campo">
+              <label for="asistencia-fecha">Fecha</label>
+              <input type="date" id="asistencia-fecha" required />
+            </div>
+            <div class="campo">
+              <label for="asistencia-estado">Estado</label>
+              <select id="asistencia-estado">
+                <option value="presente">Presente</option>
+                <option value="ausente">Ausente</option>
+                <option value="justificado">Justificado</option>
+              </select>
+            </div>
+            <div class="campo">
+              <label for="asistencia-observaciones">Observaciones</label>
+              <input type="text" id="asistencia-observaciones" />
+            </div>
+            <button type="submit" class="boton boton--primario">Registrar</button>
+          </form>
+
+          <table>
+            <thead>
+              <tr><th>Fecha</th><th>Estado</th><th>Observaciones</th></tr>
+            </thead>
+            <tbody id="tabla-asistencias"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal matrícula -->
+  <div id="modal-matricula-fondo" class="modal-fondo oculto">
+    <div class="modal-caja">
+      <h2>Nueva matrícula</h2>
+      <form id="form-matricula">
+        <div class="campo">
+          <label for="matricula-periodo">Período académico</label>
+          <select id="matricula-periodo" required></select>
+        </div>
+        <div class="campo">
+          <label for="matricula-numero">Número de matrícula</label>
+          <input type="text" id="matricula-numero" required />
+        </div>
+        <div class="campo">
+          <label for="matricula-observaciones">Observaciones</label>
+          <textarea id="matricula-observaciones" rows="2"></textarea>
+        </div>
+        <div class="modal-acciones">
+          <button type="button" id="btn-cancelar-matricula" class="boton boton--secundario">Cancelar</button>
+          <button type="submit" class="boton boton--primario">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal inscripción -->
+  <div id="modal-inscripcion-fondo" class="modal-fondo oculto">
+    <div class="modal-caja">
+      <h2>Nueva inscripción</h2>
+      <form id="form-inscripcion">
+        <div class="campo">
+          <label for="inscripcion-grupo">Grupo</label>
+          <select id="inscripcion-grupo" required></select>
+        </div>
+        <div class="modal-acciones">
+          <button type="button" id="btn-cancelar-inscripcion" class="boton boton--secundario">Cancelar</button>
+          <button type="submit" class="boton boton--primario">Inscribir</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/notificaciones.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="alumno-detalle.js"></script>
+</body>
+</html>
