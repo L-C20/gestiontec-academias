@@ -19,6 +19,8 @@ async function iniciar() {
   document.getElementById('grupo-disciplina').addEventListener('change', (e) => {
     actualizarCursosPorDisciplina(Number(e.target.value));
   });
+  document.getElementById('btn-cerrar-horarios').addEventListener('click', cerrarModalHorarios);
+  document.getElementById('form-horario').addEventListener('submit', agregarHorario);
 
   await cargarDatosDeReferencia();
   await cargarGrupos();
@@ -117,7 +119,10 @@ function renderizarTabla(grupos) {
           <td>${g.profesor_nombre ? escaparHtml(g.profesor_nombre + ' ' + g.profesor_apellido) : '-'}</td>
           <td>${escaparHtml(g.periodo_nombre)}</td>
           <td><span class="badge ${badge}">${g.estado}</span></td>
-          <td>${accionesAdmin}</td>
+          <td>
+            <button class="boton boton--texto" onclick="abrirModalHorarios(${g.id}, '${escaparHtml(g.nombre)}')">Horarios</button>
+            ${accionesAdmin}
+          </td>
         </tr>
       `;
     })
@@ -202,6 +207,80 @@ async function cambiarEstadoGrupo(id, accion) {
     await api.patch(`/admin/grupos/${id}/${accion}`);
     mostrarNotificacion(`Grupo ${accion === 'desactivar' ? 'desactivado' : 'reactivado'}`, 'exito');
     await cargarGrupos();
+  } catch (err) {
+    mostrarNotificacion(err.message, 'error');
+  }
+}
+
+const NOMBRES_DIA = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+let grupoIdActualHorarios = null;
+
+async function abrirModalHorarios(grupoId, grupoNombre) {
+  grupoIdActualHorarios = grupoId;
+  document.getElementById('horarios-grupo-nombre').textContent = grupoNombre;
+  document.getElementById('form-horario').classList.toggle('oculto', usuarioActual.rol !== 'admin');
+  await cargarHorarios();
+  document.getElementById('modal-horarios-fondo').classList.remove('oculto');
+}
+
+function cerrarModalHorarios() {
+  document.getElementById('modal-horarios-fondo').classList.add('oculto');
+  grupoIdActualHorarios = null;
+}
+
+async function cargarHorarios() {
+  try {
+    const { horarios } = await api.get(`/admin/grupos/${grupoIdActualHorarios}/horarios`);
+    const cuerpo = document.getElementById('tabla-horarios');
+    const esAdmin = usuarioActual.rol === 'admin';
+
+    if (horarios.length === 0) {
+      cuerpo.innerHTML = '<tr><td colspan="5">Sin horarios cargados.</td></tr>';
+      return;
+    }
+
+    cuerpo.innerHTML = horarios
+      .map(
+        (h) => `
+        <tr>
+          <td>${NOMBRES_DIA[h.dia_semana]}</td>
+          <td>${h.hora_inicio.slice(0, 5)}</td>
+          <td>${h.hora_fin.slice(0, 5)}</td>
+          <td>${escaparHtml(h.aula || '-')}</td>
+          <td>${esAdmin ? `<button class="boton boton--texto" onclick="eliminarHorario(${h.id})">Eliminar</button>` : ''}</td>
+        </tr>
+      `
+      )
+      .join('');
+  } catch (err) {
+    mostrarNotificacion(err.message, 'error');
+  }
+}
+
+async function agregarHorario(evento) {
+  evento.preventDefault();
+  const diaSemana = Number(document.getElementById('horario-dia').value);
+  const horaInicio = document.getElementById('horario-inicio').value;
+  const horaFin = document.getElementById('horario-fin').value;
+  const aula = document.getElementById('horario-aula').value.trim();
+
+  try {
+    await api.post(`/admin/grupos/${grupoIdActualHorarios}/horarios`, { diaSemana, horaInicio, horaFin, aula });
+    mostrarNotificacion('Horario agregado', 'exito');
+    document.getElementById('form-horario').reset();
+    await cargarHorarios();
+  } catch (err) {
+    // Acá llega el aviso de conflicto de horario del profesor si corresponde
+    mostrarNotificacion(err.message, 'error');
+  }
+}
+
+async function eliminarHorario(id) {
+  if (!(await confirmarAccion('¿Eliminar este horario?'))) return;
+  try {
+    await api.delete(`/admin/horarios/${id}`);
+    mostrarNotificacion('Horario eliminado', 'exito');
+    await cargarHorarios();
   } catch (err) {
     mostrarNotificacion(err.message, 'error');
   }
