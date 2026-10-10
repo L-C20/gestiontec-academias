@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evaluaciones — GestionTec</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="contenido">
+      <h1>Evaluaciones</h1>
+      <p class="texto-tenue">
+        La evaluación se crea una vez para todo el grupo y después se corrige a
+        cada alumno. Las que marques como obligatorias son las que el alumno
+        tiene que tener aprobadas para rendir el examen del período.
+      </p>
+
+      <div class="tarjeta">
+        <div class="filtros">
+          <div class="campo">
+            <label for="filtro-grupo">Grupo</label>
+            <select id="filtro-grupo"></select>
+          </div>
+          <div class="campo">
+            <label for="filtro-periodo">Período académico</label>
+            <select id="filtro-periodo"></select>
+          </div>
+        </div>
+
+        <div class="barra-acciones">
+          <span id="contador"></span>
+          <button id="btn-nueva" class="boton boton--primario">+ Nueva evaluación</button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Evaluación</th>
+              <th>Tipo</th>
+              <th>Fecha</th>
+              <th>Cuenta para</th>
+              <th>Corregido</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla"></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- Alta y edición de la consigna -->
+  <div id="modal-fondo" class="modal-fondo oculto">
+    <div class="modal-caja">
+      <h2 id="modal-titulo">Nueva evaluación</h2>
+      <form id="form-evaluacion">
+        <input type="hidden" id="eval-id" />
+
+        <div class="campo">
+          <label for="eval-nombre">Nombre</label>
+          <input type="text" id="eval-nombre" required placeholder="Lección 1" />
+        </div>
+
+        <div class="form-grid">
+          <div class="campo">
+            <label for="eval-tipo">Tipo de evaluación</label>
+            <select id="eval-tipo" required></select>
+          </div>
+          <div class="campo">
+            <label for="eval-periodo">Período académico</label>
+            <select id="eval-periodo" required></select>
+          </div>
+          <div class="campo">
+            <label for="eval-fecha">Fecha</label>
+            <input type="date" id="eval-fecha" />
+          </div>
+        </div>
+
+        <div class="campo">
+          <label for="eval-consigna">Consigna</label>
+          <textarea id="eval-consigna" rows="3" placeholder="Qué se evalúa"></textarea>
+        </div>
+
+        <div class="campo">
+          <label>
+            <input type="checkbox" id="eval-es-examen" />
+            Es el examen del período
+          </label>
+          <span class="texto-tenue">
+            El examen no cuenta entre los requisitos para habilitarse a rendirlo.
+          </span>
+        </div>
+
+        <div class="campo">
+          <label>
+            <input type="checkbox" id="eval-obligatoria" checked />
+            Obligatoria para habilitarse al examen
+          </label>
+          <span class="texto-tenue" id="ayuda-obligatoria"></span>
+        </div>
+
+        <div class="campo">
+          <label>
+            <input type="checkbox" id="eval-computa" checked />
+            Promedia
+          </label>
+          <span class="texto-tenue">Desmarcá si se toma pero no entra en el promedio.</span>
+        </div>
+
+        <div class="modal-acciones">
+          <button type="button" id="btn-cancelar" class="boton boton--secundario">Cancelar</button>
+          <button type="submit" class="boton boton--primario">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Planilla de notas de todo el grupo -->
+  <div id="modal-planilla" class="modal-fondo oculto">
+    <div class="modal-caja modal-caja--ancha">
+      <h2 id="planilla-titulo">Cargar notas</h2>
+      <p class="texto-tenue" id="planilla-bajada"></p>
+
+      <form id="form-planilla">
+        <!-- Fuera de la tabla: un <datalist> dentro de <tbody> es HTML
+             inválido y el navegador lo descarta. -->
+        <div id="planilla-sugerencias"></div>
+
+        <table class="planilla">
+          <thead>
+            <tr>
+              <th>Alumno</th>
+              <th class="col-angosta" id="planilla-encabezado-nota">Nota</th>
+              <th class="col-chica">Ausente</th>
+              <th>Observaciones</th>
+              <th class="col-chica">Estado</th>
+            </tr>
+          </thead>
+          <tbody id="planilla-cuerpo"></tbody>
+        </table>
+
+        <div class="modal-acciones">
+          <button type="button" id="btn-cerrar-planilla" class="boton boton--secundario">
+            Cerrar
+          </button>
+          <button type="submit" class="boton boton--primario">Guardar planilla</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/notificaciones.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="evaluaciones.js"></script>
+</body>
+</html>

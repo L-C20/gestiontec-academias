@@ -42,7 +42,7 @@ const CAMPOS_HABILITACION = `
   )                           AS adeuda,
   x.motivo                    AS excepcion_motivo,
   x.fecha                     AS excepcion_fecha,
-  x.autorizado_por            AS excepcion_autorizado_por
+  u.email                     AS excepcion_autorizado_email
 `;
 
 const DESDE_HABILITACION = `
@@ -60,8 +60,9 @@ const DESDE_HABILITACION = `
   LEFT JOIN excepciones_examen x
          ON x.inscripcion_id = pc.inscripcion_id
         AND x.periodo_academico_id = pa.id
+  LEFT JOIN usuarios u ON u.id = x.autorizado_por
   GROUP BY pa.id, pa.nombre, pa.fecha_inicio,
-           x.motivo, x.fecha, x.autorizado_por
+           x.motivo, x.fecha, u.email
   ORDER BY pa.fecha_inicio DESC, pa.id DESC
 `;
 
@@ -108,7 +109,7 @@ function interpretar(fila) {
       ? {
           motivo: fila.excepcion_motivo,
           fecha: fila.excepcion_fecha,
-          autorizadoPor: fila.excepcion_autorizado_por,
+          autorizadoPor: fila.excepcion_autorizado_email,
         }
       : null,
   };
@@ -152,7 +153,7 @@ async function porGrupo(db, grupoId, periodoAcademicoId) {
       )             AS adeuda,
       x.motivo      AS excepcion_motivo,
       x.fecha       AS excepcion_fecha,
-      x.autorizado_por AS excepcion_autorizado_por
+      u.email       AS excepcion_autorizado_email
     FROM inscripciones i
     JOIN alumnos a ON a.id = i.alumno_id
     LEFT JOIN evaluaciones e
@@ -167,10 +168,11 @@ async function porGrupo(db, grupoId, periodoAcademicoId) {
     LEFT JOIN excepciones_examen x
            ON x.inscripcion_id = i.id
           AND x.periodo_academico_id = $2
+    LEFT JOIN usuarios u ON u.id = x.autorizado_por
     WHERE i.grupo_id = $1
       AND i.estado = 'activa'
     GROUP BY i.id, a.id, a.apellido, a.nombre,
-             x.motivo, x.fecha, x.autorizado_por
+             x.motivo, x.fecha, u.email
     ORDER BY a.apellido, a.nombre
     `,
     [grupoId, periodoAcademicoId]

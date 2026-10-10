@@ -321,3 +321,83 @@ label {
     padding: 1.25rem;
   }
 }
+
+/* ---------- Evaluaciones y habilitación ---------- */
+
+.badge--habilitado { background: #e3f2e8; color: var(--exito); }
+.badge--adeuda     { background: #f2e3e3; color: var(--error); }
+.badge--excepcion  { background: #f7eed6; color: var(--advertencia); }
+.badge--pendiente  { background: var(--gris-claro); color: var(--gris-oscuro); }
+
+/* Barra de filtros: elegir grupo y período es el paso previo a todo lo demás,
+   así que va arriba y separada de la tabla. */
+.filtros {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  align-items: end;
+  margin-bottom: 1.25rem;
+}
+
+.filtros .campo {
+  margin-bottom: 0;
+}
+
+.texto-tenue {
+  color: var(--gris-oscuro);
+  font-size: 0.85rem;
+}
+
+.avance {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  color: var(--gris-oscuro);
+}
+
+/* Lo que el alumno adeuda: son nombres de evaluaciones, pueden ser varios y
+   conviene leerlos de un saltito, no en una oración corrida. */
+.lista-adeuda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.lista-adeuda span {
+  background: #f2e3e3;
+  color: var(--error);
+  border-radius: var(--radio);
+  padding: 0.1rem 0.45rem;
+  font-size: 0.78rem;
+}
+
+/* Planilla de notas: se corrige toda la clase de una vez, así que los campos
+   van dentro de la tabla y no en un formulario por alumno. */
+.planilla input[type='text'],
+.planilla input[type='number'] {
+  width: 100%;
+  min-width: 4rem;
+}
+
+.planilla td {
+  vertical-align: middle;
+}
+
+.planilla .col-angosta {
+  width: 7rem;
+}
+
+.planilla .col-chica {
+  width: 4.5rem;
+  text-align: center;
+}
+
+.modal-caja--ancha {
+  max-width: 900px;
+}
+
+.sin-datos {
+  color: var(--gris-oscuro);
+  padding: 1rem 0;
+}

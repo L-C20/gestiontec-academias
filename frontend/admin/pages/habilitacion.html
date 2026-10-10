@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Habilitación al examen — GestionTec</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="contenido">
+      <h1>Habilitación al examen</h1>
+      <p class="texto-tenue">
+        Para rendir el examen de un período hay que tener aprobadas todas las
+        evaluaciones obligatorias del grupo en ese período. Una obligatoria que
+        todavía no se corrigió también frena, porque el alumno sigue
+        adeudándola.
+      </p>
+
+      <div class="tarjeta">
+        <div class="filtros">
+          <div class="campo">
+            <label for="filtro-grupo">Grupo</label>
+            <select id="filtro-grupo"></select>
+          </div>
+          <div class="campo">
+            <label for="filtro-periodo">Período académico</label>
+            <select id="filtro-periodo"></select>
+          </div>
+        </div>
+
+        <div class="barra-acciones">
+          <span id="contador"></span>
+          <span class="texto-tenue" id="resumen"></span>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Alumno</th>
+              <th>Estado</th>
+              <th>Obligatorias</th>
+              <th>Adeuda</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla"></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <div id="modal-fondo" class="modal-fondo oculto">
+    <div class="modal-caja">
+      <h2 id="modal-titulo">Habilitar por excepción</h2>
+      <p class="texto-tenue">
+        Esto habilita a rendir a alguien que no cumple los requisitos. Queda
+        firmado con tu usuario y la fecha.
+      </p>
+
+      <form id="form-excepcion">
+        <input type="hidden" id="exc-inscripcion" />
+
+        <div class="campo">
+          <label for="exc-alumno">Alumno</label>
+          <input type="text" id="exc-alumno" disabled />
+        </div>
+
+        <div class="campo">
+          <label for="exc-motivo">Motivo</label>
+          <textarea id="exc-motivo" rows="3" required
+                    placeholder="Por qué se lo habilita sin cumplir los requisitos"></textarea>
+          <span class="texto-tenue">
+            Obligatorio: es lo único que permite revisar la decisión más adelante.
+          </span>
+        </div>
+
+        <div class="modal-acciones">
+          <button type="button" id="btn-quitar" class="boton boton--peligro oculto">
+            Quitar excepción
+          </button>
+          <button type="button" id="btn-cancelar" class="boton boton--secundario">Cancelar</button>
+          <button type="submit" class="boton boton--primario">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/notificaciones.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="habilitacion.js"></script>
+</body>
+</html>

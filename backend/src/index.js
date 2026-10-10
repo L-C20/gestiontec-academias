@@ -16,6 +16,9 @@ const alumnosRoutes = require('./routes/admin/alumnos.routes');
 const matriculasRoutes = require('./routes/admin/matriculas.routes');
 const inscripcionesRoutes = require('./routes/admin/inscripciones.routes');
 const asistenciasRoutes = require('./routes/admin/asistencias.routes');
+const tiposEvaluacionRoutes = require('./routes/admin/tiposEvaluacion.routes');
+const evaluacionesRoutes = require('./routes/admin/evaluaciones.routes');
+const habilitacionRoutes = require('./routes/admin/habilitacion.routes');
 
 const app = express();
 
@@ -42,6 +45,11 @@ app.use('/admin/matriculas', matriculasRoutes);
 app.use('/admin/inscripciones', inscripcionesRoutes);
 app.use('/admin/inscripciones/:inscripcionId/asistencias', asistenciasRoutes.porInscripcion);
 app.use('/admin/asistencias', asistenciasRoutes.porId);
+app.use('/admin/tipos-evaluacion', tiposEvaluacionRoutes);
+app.use('/admin/grupos/:grupoId/evaluaciones', evaluacionesRoutes.porGrupo);
+app.use('/admin/evaluaciones', evaluacionesRoutes.porId);
+app.use('/admin/grupos/:grupoId/habilitacion', habilitacionRoutes.porGrupo);
+app.use('/admin/inscripciones/:inscripcionId', habilitacionRoutes.porInscripcion);
 
 app.use((err, req, res, next) => {
   const status = err.statusCode || 500;

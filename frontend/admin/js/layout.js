@@ -8,6 +8,9 @@ const MODULOS_MENU = [
   { clave: 'niveles', etiqueta: 'Niveles', href: 'niveles.html' },
   { clave: 'grupos', etiqueta: 'Grupos', href: 'grupos.html' },
   { clave: 'periodos', etiqueta: 'Períodos académicos', href: 'periodos.html' },
+  { clave: 'evaluaciones', etiqueta: 'Evaluaciones', href: 'evaluaciones.html' },
+  { clave: 'habilitacion', etiqueta: 'Habilitación al examen', href: 'habilitacion.html' },
+  { clave: 'tipos-evaluacion', etiqueta: 'Tipos de evaluación', href: 'tipos-evaluacion.html' },
 ];
 
 // Se llama al principio de cada página del panel. Además de armar el menú,

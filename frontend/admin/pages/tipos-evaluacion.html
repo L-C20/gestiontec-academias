@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tipos de evaluación — GestionTec</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="contenido">
+      <h1>Tipos de evaluación</h1>
+      <p class="texto-tenue">
+        Acá se define con qué se califica cada clase de evaluación y desde dónde
+        se considera aprobada. Lo que configures acá es lo que usan el promedio,
+        la habilitación al examen y el cierre de período.
+      </p>
+
+      <div class="tarjeta">
+        <div class="barra-acciones">
+          <span id="contador"></span>
+          <button id="btn-nuevo" class="boton boton--primario">+ Nuevo tipo</button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Escala</th>
+              <th>Se aprueba con</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla"></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <div id="modal-fondo" class="modal-fondo oculto">
+    <div class="modal-caja">
+      <h2 id="modal-titulo">Nuevo tipo de evaluación</h2>
+      <form id="form-tipo">
+        <input type="hidden" id="tipo-id" />
+
+        <div class="campo">
+          <label for="tipo-nombre">Nombre</label>
+          <input type="text" id="tipo-nombre" required placeholder="Lección escrita" />
+        </div>
+
+        <div class="campo">
+          <label for="tipo-escala">Escala</label>
+          <select id="tipo-escala" required></select>
+        </div>
+
+        <div class="campo" id="campo-umbral">
+          <label for="tipo-umbral">Nota mínima para aprobar</label>
+          <input type="number" id="tipo-umbral" step="0.01" min="0" placeholder="7" />
+          <span class="texto-tenue" id="ayuda-umbral"></span>
+        </div>
+
+        <div class="campo oculto" id="campo-valores">
+          <label for="tipo-valores">Valores que cuentan como aprobado</label>
+          <input type="text" id="tipo-valores" placeholder="Aprobado" />
+          <span class="texto-tenue">
+            Separados por coma. Si lo dejás vacío, se aprueba con "Aprobado".
+          </span>
+        </div>
+
+        <div class="modal-acciones">
+          <button type="button" id="btn-cancelar" class="boton boton--secundario">Cancelar</button>
+          <button type="submit" class="boton boton--primario">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/notificaciones.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="tipos-evaluacion.js"></script>
+</body>
+</html>
