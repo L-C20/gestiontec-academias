@@ -17,28 +17,6 @@ function setTokenCookie(res, token) {
   });
 }
 
-async function registrarTenant(req, res, next) {
-  try {
-    const { nombreAcademia, slug, email, password } = req.body;
-    if (!nombreAcademia || !slug || !email || !password) {
-      throw new AppError(400, 'Faltan campos obligatorios');
-    }
-    if (password.length < 8) {
-      throw new AppError(400, 'La contraseña debe tener al menos 8 caracteres');
-    }
-
-    const { tenant, usuario } = await authService.registrarTenant({
-      nombreAcademia,
-      slug,
-      email,
-      password,
-    });
-
-    res.status(201).json({ tenant, usuario });
-  } catch (err) {
-    next(err);
-  }
-}
 
 async function login(req, res, next) {
   try {
@@ -64,8 +42,27 @@ function logout(req, res) {
   res.json({ ok: true });
 }
 
-function me(req, res) {
-  res.json({ usuario: req.user });
+async function me(req, res, next) {
+  try {
+    // El nombre de la academia en la que se esta trabajando: el frontend lo
+    // necesita para avisar, cuando es modo soporte, en casa de quien esta
+    // parado el superadmin.
+    const { rows } = await req.db.query('SELECT nombre, slug FROM tenants WHERE id = $1', [
+      req.user.tenantId,
+    ]);
+
+    res.json({
+      usuario: {
+        userId: req.user.userId,
+        email: req.user.email,
+        rol: req.user.rol,
+        soporte: req.user.soporte,
+        academia: rows[0] || null,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
 }
 
-module.exports = { registrarTenant, login, logout, me };
+module.exports = { login, logout, me };

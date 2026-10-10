@@ -401,3 +401,32 @@ label {
   color: var(--gris-oscuro);
   padding: 1rem 0;
 }
+
+/* ---------- Aviso de modo soporte ---------- */
+
+/* Cuando el proveedor entra a una academia ajena, tiene que saberlo sin
+   buscarlo: lo que toque ahí son los datos de otra persona. Por eso va en el
+   menú, visible en todas las pantallas, y con el color de advertencia. */
+.sidebar__soporte {
+  display: block;
+  margin: 0 0 1rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radio);
+  background: var(--advertencia);
+  color: var(--blanco);
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-decoration: none;
+}
+
+.sidebar__soporte:hover {
+  filter: brightness(1.1);
+}
+
+.contenido code {
+  background: var(--gris-claro);
+  border-radius: 4px;
+  padding: 0.05rem 0.3rem;
+  font-size: 0.85em;
+}

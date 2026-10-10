@@ -1,3 +1,5 @@
+// El menú de una academia: lo ven su admin y sus profesores, y también el
+// superadmin mientras está adentro en modo soporte.
 const MODULOS_MENU = [
   { clave: 'alumnos', etiqueta: 'Alumnos', href: 'alumnos.html' },
   { clave: 'matriculas', etiqueta: 'Matrículas', href: 'matriculas.html' },
@@ -13,9 +15,23 @@ const MODULOS_MENU = [
   { clave: 'tipos-evaluacion', etiqueta: 'Tipos de evaluación', href: 'tipos-evaluacion.html' },
 ];
 
-// Se llama al principio de cada página del panel. Además de armar el menú,
-// funciona como guardián de sesión: si /auth/me falla (401), redirige a login.
-// Devuelve el usuario logueado para que la página lo use si lo necesita.
+// El panel del proveedor: no administra alumnos, administra academias.
+const MODULOS_PROVEEDOR = [
+  { clave: 'academias', etiqueta: 'Academias', href: 'academias.html' },
+  { clave: 'auditoria', etiqueta: 'Auditoría', href: 'auditoria.html' },
+];
+
+function escaparTexto(valor) {
+  const div = document.createElement('div');
+  div.textContent = valor === null || valor === undefined ? '' : valor;
+  return div.innerHTML;
+}
+
+/**
+ * Se llama al principio de cada página del panel. Además de armar el menú,
+ * funciona como guardián de sesión: si /auth/me falla (401), redirige a login.
+ * Devuelve el usuario logueado para que la página lo use si lo necesita.
+ */
 async function inicializarLayout(paginaActiva) {
   let usuario;
   try {
@@ -26,17 +42,36 @@ async function inicializarLayout(paginaActiva) {
     return null;
   }
 
-  const enlaces = MODULOS_MENU.map(
-    (m) => `<a href="${m.href}" class="${m.clave === paginaActiva ? 'activo' : ''}">${m.etiqueta}</a>`
-  ).join('');
+  // El superadmin en su propia cuenta ve el panel de proveedor. Cuando entra
+  // a una academia ve el menú de esa academia, como lo ve su gente.
+  const esProveedorEnSuCasa = usuario.rol === 'superadmin' && !usuario.soporte;
+  const modulos = esProveedorEnSuCasa ? MODULOS_PROVEEDOR : MODULOS_MENU;
+
+  const enlaces = modulos
+    .map(
+      (m) =>
+        `<a href="${m.href}" class="${m.clave === paginaActiva ? 'activo' : ''}">${m.etiqueta}</a>`
+    )
+    .join('');
+
+  // Si el superadmin entró a una academia ajena, tiene que saberlo en todo
+  // momento: lo que toque acá lo está tocando en los datos de otra persona.
+  const avisoSoporte = usuario.soporte
+    ? `<a href="academias.html" class="sidebar__soporte">Estás en ${escaparTexto(
+        usuario.academia ? usuario.academia.nombre : 'otra academia'
+      )} · volver</a>`
+    : '';
 
   const contenedor = document.getElementById('sidebar-container');
   contenedor.innerHTML = `
     <aside class="sidebar">
       <div class="sidebar__marca">GESTIONTEC</div>
+      ${avisoSoporte}
       <nav class="sidebar__nav">${enlaces}</nav>
       <div class="sidebar__footer">
-        <button class="boton boton--secundario" id="btn-logout">Cerrar sesión (${usuario.rol})</button>
+        <button class="boton boton--secundario" id="btn-logout">Cerrar sesión (${escaparTexto(
+          usuario.rol
+        )})</button>
       </div>
     </aside>
   `;

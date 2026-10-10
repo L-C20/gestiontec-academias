@@ -3,9 +3,8 @@ const habilitacionController = require('../../controllers/admin/habilitacion.con
 const auth = require('../../middleware/auth.middleware');
 const tenant = require('../../middleware/tenant.middleware');
 const requireRole = require('../../middleware/role.middleware');
-const { requireSuscripcionActiva, requireFeature } = require('../../middleware/plan.middleware');
 
-const comunes = [auth, tenant, requireSuscripcionActiva(), requireFeature('evaluaciones')];
+const comunes = [auth, tenant];
 
 // Anidado bajo /admin/grupos/:grupoId/habilitacion
 const porGrupo = express.Router({ mergeParams: true });

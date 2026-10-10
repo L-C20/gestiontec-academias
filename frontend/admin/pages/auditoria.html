@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auditoría — GestionTec</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="contenido">
+      <h1>Auditoría</h1>
+      <p class="texto-tenue">
+        Cada vez que entrás a una academia y cada cambio que hacés adentro queda
+        acá. No se registran las lecturas: llenarían la lista y taparían lo que
+        importa.
+      </p>
+
+      <div class="tarjeta">
+        <div class="filtros">
+          <div class="campo">
+            <label for="filtro-academia">Academia</label>
+            <select id="filtro-academia"></select>
+          </div>
+        </div>
+
+        <div class="barra-acciones">
+          <span id="contador"></span>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Cuándo</th>
+              <th>Quién</th>
+              <th>Academia</th>
+              <th>Qué</th>
+            </tr>
+          </thead>
+          <tbody id="tabla"></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/notificaciones.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="auditoria.js"></script>
+</body>
+</html>

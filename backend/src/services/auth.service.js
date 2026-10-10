@@ -3,70 +3,41 @@ const jwt = require('jsonwebtoken');
 const pool = require('../database/pool');
 const { AppError } = require('../utils/errors');
 
-const SALT_ROUNDS = 10;
-
-async function registrarTenant({ nombreAcademia, slug, email, password }) {
-  const client = await pool.connect();
-  try {
-    await client.query('BEGIN');
-
-    const tenantResult = await client.query(
-      'INSERT INTO tenants (nombre, slug) VALUES ($1, $2) RETURNING id, nombre, slug',
-      [nombreAcademia, slug]
-    );
-    const tenant = tenantResult.rows[0];
-
-    // A partir de acá cualquier tabla con RLS exige este contexto seteado.
-    await client.query("SELECT set_config('app.current_tenant', $1, true)", [String(tenant.id)]);
-
-    const rolResult = await client.query("SELECT id FROM roles WHERE nombre = 'admin'");
-    const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
-
-    const usuarioResult = await client.query(
-      `INSERT INTO usuarios (tenant_id, rol_id, email, password_hash)
-       VALUES ($1, $2, $3, $4) RETURNING id, email`,
-      [tenant.id, rolResult.rows[0].id, email, passwordHash]
-    );
-
-    await client.query(
-      `INSERT INTO suscripciones (tenant_id, plan_id, estado)
-       SELECT $1, id, 'prueba' FROM planes WHERE nombre = 'basico'`,
-      [tenant.id]
-    );
-
-    await client.query('COMMIT');
-    return { tenant, usuario: usuarioResult.rows[0] };
-  } catch (err) {
-    await client.query('ROLLBACK').catch(() => {});
-    if (err.code === '23505') {
-      // unique_violation (slug de tenant o email repetido)
-      throw new AppError(409, 'Ya existe un registro con esos datos (slug o email duplicado)');
-    }
-    throw err;
-  } finally {
-    client.release();
-  }
-}
-
+/**
+ * Login por academia: el slug identifica a la academia y el email a la
+ * persona dentro de ella. Dos academias pueden tener el mismo email sin
+ * pisarse (`usuarios_tenant_email_unique`).
+ *
+ * El superadmin entra igual que todos, con el slug de su propia academia.
+ */
 async function login({ slug, email, password }) {
-  const tenantResult = await pool.query('SELECT id FROM tenants WHERE slug = $1', [slug]);
+  const tenantResult = await pool.query(
+    'SELECT id, nombre, activo FROM tenants WHERE slug = $1',
+    [slug]
+  );
+
+  // Mismo mensaje que una contraseña equivocada: decir "esa academia no
+  // existe" le confirma a cualquiera qué slugs son válidos.
   if (tenantResult.rows.length === 0) {
     throw new AppError(401, 'Credenciales inválidas');
   }
-  const tenantId = tenantResult.rows[0].id;
+
+  const academia = tenantResult.rows[0];
 
   const client = await pool.connect();
   let usuario;
   try {
     await client.query('BEGIN');
-    await client.query("SELECT set_config('app.current_tenant', $1, true)", [String(tenantId)]);
+    await client.query("SELECT set_config('app.current_tenant', $1, true)", [
+      String(academia.id),
+    ]);
 
     const usuarioResult = await client.query(
       `SELECT u.id, u.password_hash, u.estado, r.nombre AS rol
        FROM usuarios u
        JOIN roles r ON r.id = u.rol_id
        WHERE u.tenant_id = $1 AND u.email = $2`,
-      [tenantId, email]
+      [academia.id, email]
     );
     await client.query('COMMIT');
     usuario = usuarioResult.rows[0];
@@ -80,17 +51,32 @@ async function login({ slug, email, password }) {
   if (!usuario) {
     throw new AppError(401, 'Credenciales inválidas');
   }
-  if (usuario.estado !== 'activo') {
-    throw new AppError(403, 'El usuario está inactivo');
-  }
 
+  // La contraseña se verifica antes de contar cualquier cosa sobre el estado
+  // de la cuenta o de la academia: si no, quien no sabe la contraseña igual
+  // averiguaría que la academia existe y está suspendida.
   const passwordValida = await bcrypt.compare(password, usuario.password_hash);
   if (!passwordValida) {
     throw new AppError(401, 'Credenciales inválidas');
   }
 
+  if (usuario.estado !== 'activo') {
+    throw new AppError(403, 'El usuario está inactivo');
+  }
+
+  // Una academia suspendida no deja entrar a su gente. El superadmin sí,
+  // porque tiene que poder revisarla para decidir si la reactiva.
+  if (!academia.activo && usuario.rol !== 'superadmin') {
+    throw new AppError(403, 'La academia está suspendida. Contactate con el administrador.');
+  }
+
   const token = jwt.sign(
-    { userId: usuario.id, tenantId, rol: usuario.rol },
+    {
+      userId: usuario.id,
+      tenantId: academia.id,
+      tenantPropioId: academia.id,
+      rol: usuario.rol,
+    },
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRES_IN }
   );
@@ -98,4 +84,4 @@ async function login({ slug, email, password }) {
   return token;
 }
 
-module.exports = { registrarTenant, login };
+module.exports = { login };

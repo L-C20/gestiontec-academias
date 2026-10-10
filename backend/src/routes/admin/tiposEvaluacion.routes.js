@@ -3,11 +3,10 @@ const tiposController = require('../../controllers/admin/tiposEvaluacion.control
 const auth = require('../../middleware/auth.middleware');
 const tenant = require('../../middleware/tenant.middleware');
 const requireRole = require('../../middleware/role.middleware');
-const { requireSuscripcionActiva, requireFeature } = require('../../middleware/plan.middleware');
 
 const router = express.Router();
 
-router.use(auth, tenant, requireSuscripcionActiva(), requireFeature('evaluaciones'));
+router.use(auth, tenant);
 
 // El profesor necesita leerlos para elegir el tipo al crear una evaluación,
 // pero la escala y el umbral de aprobación los define administración: es una

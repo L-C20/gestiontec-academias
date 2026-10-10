@@ -19,6 +19,7 @@ const asistenciasRoutes = require('./routes/admin/asistencias.routes');
 const tiposEvaluacionRoutes = require('./routes/admin/tiposEvaluacion.routes');
 const evaluacionesRoutes = require('./routes/admin/evaluaciones.routes');
 const habilitacionRoutes = require('./routes/admin/habilitacion.routes');
+const superadminRoutes = require('./routes/superadmin/academias.routes');
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.get('/health', async (req, res) => {
 });
 
 app.use('/auth', authRoutes);
+app.use('/superadmin', superadminRoutes);
 app.use('/admin/disciplinas', disciplinasRoutes);
 app.use('/admin/cursos', cursosRoutes);
 app.use('/admin/niveles', nivelesRoutes);

@@ -3,9 +3,8 @@ const evaluacionesController = require('../../controllers/admin/evaluaciones.con
 const auth = require('../../middleware/auth.middleware');
 const tenant = require('../../middleware/tenant.middleware');
 const requireRole = require('../../middleware/role.middleware');
-const { requireSuscripcionActiva, requireFeature } = require('../../middleware/plan.middleware');
 
-const comunes = [auth, tenant, requireSuscripcionActiva(), requireFeature('evaluaciones')];
+const comunes = [auth, tenant];
 
 // El profesor crea sus propias consignas y corrige: por eso escribe acá.
 // Que solo pueda hacerlo sobre los grupos a su cargo lo controla el

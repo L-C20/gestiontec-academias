@@ -9,9 +9,17 @@ function auth(req, res, next) {
 
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET);
+
+    // `tenantId` es la academia en la que se está trabajando y
+    // `tenantPropioId` la academia a la que pertenece la cuenta. Son
+    // distintas solo cuando el superadmin entró a una academia ajena.
+    //
+    // El `rol` que viene acá es provisorio: tenant.middleware lo reemplaza
+    // por el que dice la base. No se usa para decidir permisos.
     req.user = {
       userId: payload.userId,
       tenantId: payload.tenantId,
+      tenantPropioId: payload.tenantPropioId || payload.tenantId,
       rol: payload.rol,
     };
     next();

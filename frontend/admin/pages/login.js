@@ -1,4 +1,5 @@
-// Si venimos desde el registro con ?slug=..., lo precargamos.
+// El superadmin le pasa a cada academia un enlace con ?slug=..., para que
+// su gente no tenga que acordarse del identificador.
 const parametros = new URLSearchParams(window.location.search);
 const slugPrecargado = parametros.get('slug');
 if (slugPrecargado) {

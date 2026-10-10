@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Academias — GestionTec</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="contenido">
+      <h1>Academias</h1>
+      <p class="texto-tenue">
+        Las academias se dan de alta acá. Cuando creás una, se crea también su
+        primer administrador, que es quien después carga a su gente.
+      </p>
+
+      <div class="tarjeta">
+        <div class="barra-acciones">
+          <span id="contador"></span>
+          <button id="btn-nueva" class="boton boton--primario">+ Nueva academia</button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Academia</th>
+              <th>Identificador</th>
+              <th>Contacto</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla"></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- Alta: academia + su primer administrador -->
+  <div id="modal-alta" class="modal-fondo oculto">
+    <div class="modal-caja">
+      <h2>Nueva academia</h2>
+
+      <form id="form-alta">
+        <div class="campo">
+          <label for="alta-nombre">Nombre de la academia</label>
+          <input type="text" id="alta-nombre" required placeholder="Academia Musical Armonía" />
+        </div>
+
+        <div class="campo">
+          <label for="alta-slug">Identificador</label>
+          <input type="text" id="alta-slug" required placeholder="academia-armonia" />
+          <span class="texto-tenue">
+            Minúsculas, números y guiones. Es lo que su gente escribe para entrar,
+            así que conviene que sea corto y fácil de dictar por teléfono.
+          </span>
+        </div>
+
+        <h3>Primer administrador</h3>
+        <div class="form-grid">
+          <div class="campo">
+            <label for="alta-admin-email">Email</label>
+            <input type="email" id="alta-admin-email" required placeholder="admin@academia.com" />
+          </div>
+          <div class="campo">
+            <label for="alta-admin-password">Contraseña inicial</label>
+            <input type="password" id="alta-admin-password" required minlength="8"
+                   placeholder="Mínimo 8 caracteres" />
+          </div>
+        </div>
+        <p class="texto-tenue">
+          Pasale estos datos por el mismo medio por el que te contactó, y que la
+          cambie cuando entre.
+        </p>
+
+        <h3>Con quién hablaste</h3>
+        <div class="form-grid">
+          <div class="campo">
+            <label for="alta-contacto-nombre">Nombre</label>
+            <input type="text" id="alta-contacto-nombre" />
+          </div>
+          <div class="campo">
+            <label for="alta-contacto-email">Email</label>
+            <input type="email" id="alta-contacto-email" />
+          </div>
+          <div class="campo">
+            <label for="alta-contacto-telefono">Teléfono</label>
+            <input type="text" id="alta-contacto-telefono" />
+          </div>
+        </div>
+
+        <div class="campo">
+          <label for="alta-observaciones">Notas</label>
+          <textarea id="alta-observaciones" rows="2"
+                    placeholder="Qué pidió, qué le prometiste, cuándo"></textarea>
+        </div>
+
+        <div class="modal-acciones">
+          <button type="button" id="btn-cancelar-alta" class="boton boton--secundario">
+            Cancelar
+          </button>
+          <button type="submit" class="boton boton--primario">Crear academia</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edición de los datos de contacto -->
+  <div id="modal-editar" class="modal-fondo oculto">
+    <div class="modal-caja">
+      <h2>Editar academia</h2>
+
+      <form id="form-editar">
+        <input type="hidden" id="editar-id" />
+
+        <div class="campo">
+          <label for="editar-nombre">Nombre</label>
+          <input type="text" id="editar-nombre" required />
+        </div>
+
+        <div class="campo">
+          <label for="editar-slug">Identificador</label>
+          <input type="text" id="editar-slug" disabled />
+          <span class="texto-tenue">
+            No se puede cambiar: su gente ya lo usa para entrar.
+          </span>
+        </div>
+
+        <div class="form-grid">
+          <div class="campo">
+            <label for="editar-contacto-nombre">Contacto</label>
+            <input type="text" id="editar-contacto-nombre" />
+          </div>
+          <div class="campo">
+            <label for="editar-contacto-email">Email</label>
+            <input type="email" id="editar-contacto-email" />
+          </div>
+          <div class="campo">
+            <label for="editar-contacto-telefono">Teléfono</label>
+            <input type="text" id="editar-contacto-telefono" />
+          </div>
+        </div>
+
+        <div class="campo">
+          <label for="editar-observaciones">Notas</label>
+          <textarea id="editar-observaciones" rows="2"></textarea>
+        </div>
+
+        <div class="modal-acciones">
+          <button type="button" id="btn-cancelar-editar" class="boton boton--secundario">
+            Cancelar
+          </button>
+          <button type="submit" class="boton boton--primario">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/notificaciones.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="academias.js"></script>
+</body>
+</html>
